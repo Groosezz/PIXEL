@@ -6,7 +6,9 @@
 #SBATCH --time=00:20:00
 
 # Replace [budget code] below with your project code (e.g. t01)
-#SBATCH --account=[budget code]
+#SBATCH --account=sc118
+
+#SBATCH --job-name=pixel-test
 
 # Load the required modules
 module load nvidia/nvhpc
