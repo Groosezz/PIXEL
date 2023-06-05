@@ -18,6 +18,7 @@ import os
 import sys
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, Optional
+import submitit
 
 import datasets
 import torch
@@ -226,7 +227,13 @@ def main(config_dict: Dict[str, Any] = None):
             model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     else:
         model_args, data_args, training_args = parser.parse_dict(config_dict)
-
+    
+    # add output_dir and run_name
+    job_env = submitit.JobEnvironment()
+    training_args["output_dir"] = os.path.join(
+            training_args["output_dir"].replace("%j", str(job_env.job_id)), "outputs")
+    training_args["run_name"] = "pixel_%j".replace("%j", str(job_env.job_id))
+        
     # Setup logging
     log_level = logging.INFO
     logging.basicConfig(

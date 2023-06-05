@@ -171,15 +171,16 @@ def main():
         slurm_setup=[
             "export MASTER_ADDR=$(hostname -s)",
             f"export MASTER_PORT={get_port()}",
-            "export WANDB_API_KEY=<redacted_api_key>"
+            "export WANDB_API_KEY=51b11767e418e6e1b836ebd2559f3a7c074b70ed"
         ],
         # Below are cluster dependent parameters
         slurm_partition=partition,
         slurm_signal_delay_s=120,
+        
         **kwargs,
     )
 
-    executor.update_parameters(name="pixel")
+    executor.update_parameters(name="pixel_test")
 
     print(args)
     trainer = Trainer(config_dict)
