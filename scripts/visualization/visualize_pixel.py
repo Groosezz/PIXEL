@@ -61,7 +61,7 @@ def main(args: argparse.Namespace):
 
     set_seed(args.seed)
 
-    wandb.init()
+    wandb.init(settings=wandb.Settings(_service_wait=300))
     wandb.run.name = args.revision
 
     config_kwargs = {

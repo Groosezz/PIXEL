@@ -230,9 +230,9 @@ def main(config_dict: Dict[str, Any] = None):
     
     # add output_dir and run_name
     job_env = submitit.JobEnvironment()
-    training_args["output_dir"] = os.path.join(
-            training_args["output_dir"].replace("%j", str(job_env.job_id)), "outputs")
-    training_args["run_name"] = "pixel_%j".replace("%j", str(job_env.job_id))
+    training_args.output_dir = os.path.join(
+            training_args.output_dir.replace("%j", str(job_env.job_id)), "outputs")
+    training_args.run_name = training_args.run_name.replace("%j", str(job_env.job_id))
         
     # Setup logging
     log_level = logging.INFO
@@ -452,7 +452,6 @@ def main(config_dict: Dict[str, Any] = None):
                 torch.tensor(patch_mask_generator(num_patches + 1), dtype=torch.float32)
                 for num_patches in examples["num_patches"]
             ]
-
         return examples
 
     if training_args.do_train:

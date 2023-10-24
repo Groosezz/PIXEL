@@ -350,6 +350,7 @@ def main():
     test_dataset = get_dataset(config, data_args, processor, modality, Split.TEST) if training_args.do_predict else None
 
     def align_predictions(predictions: np.ndarray, label_ids: np.ndarray) -> Tuple[List[int], List[int]]:
+        print(predictions.shape)
         preds = np.argmax(predictions, axis=2)
 
         batch_size, seq_len = preds.shape

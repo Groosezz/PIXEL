@@ -3,9 +3,9 @@
   "dpi": 120,
   "font_color": "black",
   "font_file": "GoNotoCurrent.ttf",
-  "font_size": 8,
+  "font_size": 4,
   "max_seq_length": 529,
-  "pad_size": 3,
+  "pad_size": 8,
   "pixels_per_patch": 16,
   "text_renderer_type": "TextRenderer"
 }

@@ -25,11 +25,11 @@ class SubmititTrainingArguments:
     comment: Optional[str] = field(default=None, metadata={"help": "Comment to pass to scheduler"})
 
     def __post_init__(self):
-        if self.prototype_config_name and self.prototype_config_name not in MODEL_PROTOTYPE_CONFIGS:
-            raise ValueError(
-                f"Specified prototype model config not available. "
-                f"Available options: {list(MODEL_PROTOTYPE_CONFIGS.keys())}"
-            )
+        #if self.prototype_config_name and self.prototype_config_name not in MODEL_PROTOTYPE_CONFIGS:
+            #raise ValueError(
+               # f"Specified prototype model config not available. "
+               # f"Available options: {list(MODEL_PROTOTYPE_CONFIGS.keys())}"
+           # )
 
         self.job_dir = os.path.join(self.job_dir, "%j")
 
@@ -49,7 +49,7 @@ class Trainer:
         self.config_dict = config_dict
 
     def __call__(self):
-        import scripts.training.run_pretraining as trainer
+        import scripts.our_model.pretrain_bart as trainer
 
         self._setup()
         trainer.main(self.config_dict)
@@ -58,10 +58,12 @@ class Trainer:
         import submitit
 
         job_env = submitit.JobEnvironment()
-
+        
+        '''
         self.config_dict["output_dir"] = os.path.join(
             self.config_dict["output_dir"].replace("%j", str(job_env.job_id)), "outputs"
         )
+        '''
         self.config_dict["run_name"] = self.config_dict["run_name"].replace("%j", str(job_env.job_id))
 
         os.environ["LOCAL_RANK"] = str(job_env.local_rank)
@@ -97,7 +99,8 @@ def get_config_dict(**kwargs):
     # Model config
     prototype_config_name = kwargs.pop("prototype_config_name")
     if prototype_config_name:
-        model_config = load_json(MODEL_PROTOTYPE_CONFIGS[prototype_config_name])
+        #model_config = load_json(MODEL_PROTOTYPE_CONFIGS[prototype_config_name])
+        model_config = load_json(prototype_config_name)
         [kwargs.pop(k) for k in model_config.keys() if k in kwargs]
         config_dict.update(model_config)
 
@@ -106,7 +109,8 @@ def get_config_dict(**kwargs):
     # Training config
     training_config_name = kwargs.pop("training_config_name")
     if training_config_name:
-        training_config = load_json(TRAINING_CONFIGS[training_config_name])
+        #training_config = load_json(TRAINING_CONFIGS[training_config_name])
+        training_config = load_json(training_config_name)
         [kwargs.pop(k) for k in training_config.keys() if k in kwargs]
         config_dict.update(training_config)
 
@@ -159,7 +163,8 @@ def main():
         kwargs["slurm_comment"] = args.comment
     if args.exclude_nodes:
         kwargs["slurm_exclude"] = args.exclude_nodes
-
+    
+    '''
     executor.update_parameters(
         stderr_to_stdout=True,
         mem_gb=40 * num_gpus_per_node,
@@ -177,6 +182,27 @@ def main():
         slurm_partition=partition,
         slurm_signal_delay_s=120,
         
+        **kwargs,
+    )
+    '''
+    executor.update_parameters(
+        stderr_to_stdout=True,
+        gpus_per_node=num_gpus_per_node,
+        nodes=nodes,
+        slurm_setup=[
+            "#SBATCH --exclusive",
+            "#SBATCH --gres=gpu:4",
+            "#SBATCH --qos=gpu",
+            "#SBATCH --account=sc118",
+            "#SBATCH --time=24:00:00",
+            "source activate_pixel.sh",
+            "export MASTER_ADDR=$(hostname -s)",
+            f"export MASTER_PORT={get_port()}",
+            "export TRANSFORMERS_OFFLINE=1",
+            "export HF_DATASETS_OFFLINE=1",
+        ],
+        # Below are cluster dependent parameters
+        slurm_partition=partition,
         **kwargs,
     )
 

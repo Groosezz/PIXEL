@@ -1,0 +1,14 @@
+06/17/2023 23:47:30 - INFO - __main__ - Saved predictions and labels to test-pos/eval_predictions.csv
+06/17/2023 23:47:30 - INFO - __main__ - Logging as table to wandb
+[INFO|trainer.py:2389] 2023-06-17 23:47:33,230 >> ***** Running Prediction *****
+[INFO|trainer.py:2391] 2023-06-17 23:47:33,230 >>   Num examples = 2077
+[INFO|trainer.py:2394] 2023-06-17 23:47:33,230 >>   Batch size = 8
+***** test metrics *****
+  test_accuracy           =     0.9674
+  test_loss               =     0.2505
+  test_runtime            = 0:02:19.48
+  test_samples            =       2077
+  test_samples_per_second =      14.89
+  test_steps_per_second   =      1.864
+06/17/2023 23:50:00 - INFO - __main__ - Saved predictions and labels to test-pos/test_predictions.csv
+06/17/2023 23:50:00 - INFO - __main__ - Logging as table to wandb

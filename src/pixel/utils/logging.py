@@ -23,8 +23,8 @@ def log_sequence_classification_predictions(
     prefix: str = "eval",
 ):
     # Initialize wandb if not already done
-    if not training_args.do_train:
-        wandb.init(reinit=False)
+    #if not training_args.do_train:
+        #wandb.init(reinit=False)
 
     data = []
     out_file = os.path.join(training_args.output_dir, f"{prefix}_outputs.csv")
@@ -39,26 +39,30 @@ def log_sequence_classification_predictions(
                 sentence2 = example[sentence2_key]
             else:
                 sentence2 = ""
-
+            
+            '''
             if modality == Modality.IMAGE:
                 processed_input = wandb.Image(unpatchify(patchify(feature["pixel_values"])))
             elif modality == Modality.TEXT:
                 processed_input = feature["input_ids"]
             else:
                 raise ValueError(f"Modality {modality} not supported.")
+            '''
 
             label = example["label"]
             prediction = np.argmax(prediction)
             seq_len = len(sentence1) + len(sentence2)
 
-            data.append([sentence1, sentence2, processed_input, label, prediction, seq_len])
+            #data.append([sentence1, sentence2, processed_input, label, prediction, seq_len])
 
             f.write(f"{sentence1}\t{sentence2}\t{label}\t{prediction}\t{seq_len}\n")
 
     logger.info(f"Saved predictions outputs to {out_file}")
+    
+    '''
     logger.info(f"Logging as table to wandb")
-
     preds_table = wandb.Table(
         columns=["sentence1", "sentence2", "processed_input", "label", "prediction", "length"], data=data
     )
     wandb.log({f"{prefix}_outputs": preds_table})
+    '''

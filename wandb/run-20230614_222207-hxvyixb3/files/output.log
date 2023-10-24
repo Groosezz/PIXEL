@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/mnt/lustre/indy2lfs/work/sc118/sc118/xliao11/PIXEL/src/pixel/data/rendering/rendering_utils.py", line 243, in get_text_renderer_dict
+    resolved_text_renderer_file = cached_path(
+  File "/work/sc118/sc118/xliao11/miniconda3/envs/pixel-env/lib/python3.9/site-packages/transformers/file_utils.py", line 1936, in cached_path
+    raise EnvironmentError(f"file {url_or_filename} not found")
+OSError: file ../cache/models/pixel-base/text_renderer_config.json not found
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/mnt/lustre/indy2lfs/work/sc118/sc118/xliao11/PIXEL/./scripts/visualization/visualize_pixel.py", line 225, in <module>
+    main(parsed_args)
+  File "/mnt/lustre/indy2lfs/work/sc118/sc118/xliao11/PIXEL/./scripts/visualization/visualize_pixel.py", line 73, in main
+    text_renderer = PyGameTextRenderer.from_pretrained(
+  File "/mnt/lustre/indy2lfs/work/sc118/sc118/xliao11/PIXEL/src/pixel/data/rendering/rendering_utils.py", line 147, in from_pretrained
+    text_renderer_dict, kwargs = cls.get_text_renderer_dict(pretrained_model_name_or_path, **kwargs)
+  File "/mnt/lustre/indy2lfs/work/sc118/sc118/xliao11/PIXEL/src/pixel/data/rendering/rendering_utils.py", line 279, in get_text_renderer_dict
+    raise EnvironmentError(
+OSError: Can't load text renderer for '../cache/models/pixel-base'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure '../cache/models/pixel-base' is the correct path to a directory containing a text_renderer_config.json file
